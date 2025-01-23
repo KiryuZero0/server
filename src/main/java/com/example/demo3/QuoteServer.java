@@ -6,30 +6,29 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
 
+import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
+
 public class QuoteServer {
     private static final int PORT = 12345;
-    private static final int TIMEOUT_MS = 1 * 60 * 1000; // 5 minute în milisecunde
-    private static final Map<String, String> characterImages = new HashMap<>();
+    private static final String QUOTES_FILE = "src/main/resources/quotes.txt";
+    private static final String USERS_FILE = "src/main/resources/users.json";
+
     private static final List<ClientHandler> clients = new ArrayList<>();
+    private static final Map<String, Integer> videoVotes = new HashMap<>();
+    private static final List<String> proposedVideos = new ArrayList<>();
+    private static final List<String> quotes = new ArrayList<>();
+
     private static final Logger logger = Logger.getLogger(QuoteServer.class.getName());
 
     public static void main(String[] args) {
-        configureLogger(); // Configurare logger
+        configureLogger();
         logger.info("Starting QuoteServer...");
+        loadQuotes();
 
-        // Încarcă citate și imagini
-        List<String> quotes = loadQuotes("quotes.txt");
-        loadCharacterImages();
-
-        if (quotes.isEmpty()) {
-            logger.severe("No quotes found. Please check the file.");
-            return;
-        }
-
-        ExecutorService threadPool = Executors.newFixedThreadPool(10); // Pool cu maxim 10 fire
+        ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            serverSocket.setSoTimeout(TIMEOUT_MS); // Timeout de 5 minute
             logger.info("Server started on port " + PORT);
 
             while (true) {
@@ -37,14 +36,13 @@ public class QuoteServer {
                     Socket clientSocket = serverSocket.accept();
                     logger.info("Client connected: " + clientSocket.getInetAddress());
 
-                    ClientHandler handler = new ClientHandler(clientSocket, quotes);
+                    ClientHandler handler = new ClientHandler(clientSocket);
                     synchronized (clients) {
                         clients.add(handler);
                     }
                     threadPool.submit(handler);
-                } catch (SocketTimeoutException e) {
-                    logger.warning("No client connected for 5 minutes. Server shutting down...");
-                    break; // Ieșim din bucla principală
+                } catch (IOException e) {
+                    logger.warning("Error accepting client: " + e.getMessage());
                 }
             }
         } catch (IOException e) {
@@ -55,28 +53,16 @@ public class QuoteServer {
         }
     }
 
-    private static List<String> loadQuotes(String filename) {
-        List<String> quotes = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+    private static void loadQuotes() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(QUOTES_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                quotes.add(line);
+                quotes.add(line.trim());
             }
-            logger.info("Loaded " + quotes.size() + " quotes from file.");
+            logger.info("Loaded " + quotes.size() + " quotes.");
         } catch (IOException e) {
-            logger.severe("Error reading quotes file: " + e.getMessage());
+            logger.warning("Failed to load quotes: " + e.getMessage());
         }
-        return quotes;
-    }
-
-    private static void loadCharacterImages() {
-        characterImages.put("Goku", "C:\\Users\\Zero\\Documents\\GitHub\\PCD\\ACS1\\src\\main\\java\\images\\goku.jpg");
-        characterImages.put("Naruto", "C:\\Users\\Zero\\Documents\\GitHub\\PCD\\ACS1\\src\\main\\java\\images\\naruto.jpg");
-        characterImages.put("Luffy", "C:\\Users\\Zero\\Documents\\GitHub\\PCD\\ACS1\\src\\main\\java\\images\\luffy.jpg");
-        characterImages.put("Mikasa", "C:\\Users\\Zero\\Documents\\GitHub\\PCD\\ACS1\\src\\main\\java\\images\\mikasa.jpg");
-        characterImages.put("Edward", "C:\\Users\\Zero\\Documents\\GitHub\\PCD\\ACS1\\src\\main\\java\\images\\edward.jpg");
-        characterImages.put("Default", "C:\\Users\\Zero\\Documents\\GitHub\\PCD\\ACS1\\src\\main\\java\\images\\default.jpg");
-        logger.info("Loaded character image mappings.");
     }
 
     private static void configureLogger() {
@@ -88,7 +74,7 @@ public class QuoteServer {
             consoleHandler.setFormatter(new SimpleFormatter());
             rootLogger.addHandler(consoleHandler);
 
-            FileHandler fileHandler = new FileHandler("server.log", true); // Log în fișier
+            FileHandler fileHandler = new FileHandler("server.log", true);
             fileHandler.setLevel(Level.ALL);
             fileHandler.setFormatter(new SimpleFormatter());
             rootLogger.addHandler(fileHandler);
@@ -99,31 +85,31 @@ public class QuoteServer {
         }
     }
 
-    // Client handler pentru gestionarea fiecărui client conectat
     static class ClientHandler implements Runnable {
         private final Socket clientSocket;
-        private final List<String> quotes;
         private PrintWriter out;
+        private BufferedReader in;
 
-        public ClientHandler(Socket clientSocket, List<String> quotes) {
+        public ClientHandler(Socket clientSocket) {
             this.clientSocket = clientSocket;
-            this.quotes = quotes;
         }
 
         @Override
         public void run() {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-
-                this.out = out;
-                logger.info("Handling client: " + clientSocket.getInetAddress());
+            try {
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
 
                 String clientMessage;
                 while ((clientMessage = in.readLine()) != null) {
-                    if (clientMessage.equalsIgnoreCase("GET")) {
+                    if (clientMessage.equals("GET_QUOTE")) {
                         sendRandomQuote();
                     } else if (clientMessage.startsWith("CHAT:")) {
-                        broadcastMessage(clientMessage.substring(5).trim());
+                        handleChat(clientMessage.substring(5));
+                    } else if (clientMessage.startsWith("PROPOSE:")) {
+                        handleProposedVideo(clientMessage.substring(8));
+                    } else if (clientMessage.startsWith("VOTE:")) {
+                        handleVote(clientMessage.substring(5));
                     }
                 }
             } catch (IOException e) {
@@ -134,7 +120,6 @@ public class QuoteServer {
                     synchronized (clients) {
                         clients.remove(this);
                     }
-                    logger.info("Client disconnected: " + clientSocket.getInetAddress());
                 } catch (IOException e) {
                     logger.severe("Error closing client socket: " + e.getMessage());
                 }
@@ -142,33 +127,73 @@ public class QuoteServer {
         }
 
         private void sendRandomQuote() {
+            if (quotes.isEmpty()) {
+                out.println("SERVER: No quotes available.");
+                return;
+            }
+
             Random random = new Random();
-            String quote = quotes.get(random.nextInt(quotes.size()));
+            String randomQuote = quotes.get(random.nextInt(quotes.size()));
 
-            String character = extractCharacterName(quote);
-            String imagePath = characterImages.getOrDefault(character, "images/default.jpg");
+            // Parse quote and author
+            String[] parts = randomQuote.split(" - ", 2);
+            if (parts.length == 2) {
+                String quoteText = parts[0].trim();
+                String author = parts[1].trim();
 
-            out.println("QUOTE:" + quote);
-            out.println("IMAGE:" + imagePath);
-
-            logger.info("Sent quote: " + quote);
-            logger.info("Sent image: " + imagePath);
+                out.println("QUOTE:" + quoteText + " - " + author);
+                out.println("IMAGE:images/" + author.replace(" ", "_").toLowerCase() + ".jpg");
+            } else {
+                out.println("SERVER: Invalid quote format.");
+            }
         }
 
-        private String extractCharacterName(String quote) {
-            if (quote.contains("-")) {
-                return quote.substring(quote.lastIndexOf('-') + 1).trim();
+        private void handleChat(String message) {
+            broadcastMessage("CHAT:" + message);
+        }
+
+        private void handleProposedVideo(String videoUrl) {
+            synchronized (proposedVideos) {
+                if (!proposedVideos.contains(videoUrl)) {
+                    proposedVideos.add(videoUrl);
+                    broadcastProposals();
+                } else {
+                    out.println("SERVER: Video already proposed.");
+                }
             }
-            return "Default";
+        }
+
+        private void handleVote(String videoUrl) {
+            synchronized (videoVotes) {
+                videoVotes.put(videoUrl, videoVotes.getOrDefault(videoUrl, 0) + 1);
+
+                if (videoVotes.get(videoUrl) > clients.size() / 2) {
+                    broadcastMessage("VIDEO_CHANGE:" + videoUrl);
+                    proposedVideos.clear();
+                    videoVotes.clear();
+                } else {
+                    broadcastProposals();
+                }
+            }
+        }
+
+        private void broadcastProposals() {
+            StringBuilder proposalsMessage = new StringBuilder("PROPOSALS:");
+            synchronized (proposedVideos) {
+                for (String video : proposedVideos) {
+                    proposalsMessage.append("\n").append(video).append(" (")
+                            .append(videoVotes.getOrDefault(video, 0)).append(" votes)");
+                }
+            }
+            broadcastMessage(proposalsMessage.toString());
         }
 
         private void broadcastMessage(String message) {
             synchronized (clients) {
                 for (ClientHandler client : clients) {
-                    client.out.println("CHAT:" + message);
+                    client.out.println(message);
                 }
             }
-            logger.info("Broadcasted message: " + message);
         }
     }
 }

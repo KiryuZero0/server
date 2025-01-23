@@ -3,11 +3,13 @@ package com.example.demo3;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
@@ -36,6 +38,9 @@ public class QuoteClient extends Application {
     // Live Tab Components
     private ListView<String> videoListView = new ListView<>();
     private WebView videoWebView = new WebView();
+    private TextField videoTitleInput = new TextField();
+    private TextField videoUrlInput = new TextField();
+    private Button addVideoButton = new Button("Add Video");
 
     // Chat Tab Components
     private TextArea chatArea = new TextArea();
@@ -95,7 +100,7 @@ public class QuoteClient extends Application {
 
         VBox quotesBox = new VBox(10, quoteLabel, authorImageView, nextQuoteButton);
         quotesBox.setPadding(new Insets(10));
-        quotesBox.setStyle("-fx-alignment: center;");
+        quotesBox.setStyle("-fx-alignment: center; -fx-background-color: #f0f0f0;");
         return quotesBox;
     }
 
@@ -111,8 +116,24 @@ public class QuoteClient extends Application {
             }
         });
 
-        VBox liveBox = new VBox(10, new Label("Available Videos:"), videoListView, new Label("Video Player:"), videoWebView);
+        // Configure Add Video Components
+        videoTitleInput.setPromptText("Enter video title...");
+        videoUrlInput.setPromptText("Enter video URL...");
+        addVideoButton.setOnAction(event -> addVideo());
+
+        HBox addVideoBox = new HBox(10, videoTitleInput, videoUrlInput, addVideoButton);
+        addVideoBox.setAlignment(Pos.CENTER);
+
+        VBox liveBox = new VBox(10,
+                new Label("Available Videos:"),
+                videoListView,
+                new Label("Video Player:"),
+                videoWebView,
+                new Label("Add a New Video:"),
+                addVideoBox
+        );
         liveBox.setPadding(new Insets(10));
+        liveBox.setStyle("-fx-background-color: #e6f7ff;");
         return liveBox;
     }
 
@@ -130,6 +151,7 @@ public class QuoteClient extends Application {
 
         VBox chatBox = new VBox(10, new Label("Chat:"), new ScrollPane(chatArea), chatInput);
         chatBox.setPadding(new Insets(10));
+        chatBox.setStyle("-fx-background-color: #f9f9f9;");
         return chatBox;
     }
 
@@ -161,9 +183,7 @@ public class QuoteClient extends Application {
                 username = usernameInput.get().trim();
 
                 boolean userExists = usersArray.stream()
-                        .map(obj -> (JSONObject) obj) // Conversia la JSONObject
                         .anyMatch(user -> username.equals(((JSONObject) user).get("username")));
-// Acces corect la valoare
 
                 if (!userExists) {
                     TextInputDialog passwordDialog = new TextInputDialog();
@@ -179,7 +199,7 @@ public class QuoteClient extends Application {
                         newUser.put("password", password);
                         usersArray.add(newUser);
 
-                        try (FileWriter writer = new FileWriter(USERS_FILE)) {
+                        try (FileWriter writer = new FileWriter(usersFile)) {
                             writer.write(usersArray.toJSONString());
                         }
 
@@ -220,6 +240,28 @@ public class QuoteClient extends Application {
         } catch (IOException e) {
             showError("Failed to load videos.");
         }
+    }
+
+    private void addVideo() {
+        String title = videoTitleInput.getText().trim();
+        String url = videoUrlInput.getText().trim();
+        if (title.isEmpty() || url.isEmpty()) {
+            showError("Both title and URL must be provided.");
+            return;
+        }
+
+        String videoEntry = title + ": " + url;
+        videoListView.getItems().add(videoEntry);
+
+        try (FileWriter writer = new FileWriter(VIDEOS_FILE, true)) {
+            writer.write(videoEntry + System.lineSeparator());
+            showInfo("Video added successfully!");
+        } catch (IOException e) {
+            showError("Failed to save video.");
+        }
+
+        videoTitleInput.clear();
+        videoUrlInput.clear();
     }
 
     private void displayRandomQuote() {

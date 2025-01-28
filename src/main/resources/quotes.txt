@@ -1,26 +1,26 @@
 Fear is not evil. It tells you what your weakness is. - Gildarts Clive
 A lesson without pain is meaningless. That’s because you can’t gain something without sacrificing something else in return. - Edward Elric
 Power comes in response to a need, not a desire. You have to create that need. - Goku
-The world isn’t perfect. But it’s there for us, trying the best it can; that’s what makes it so damn beautiful. - Roy Mustang, Fullmetal Alchemist: Brotherhood
+The world isn’t perfect. But it’s there for us, trying the best it can; that’s what makes it so damn beautiful. - Roy Mustang
 A person becomes strong when they have someone they want to protect. - Haku
 Forgetting is like a wound. The wound may heal, but it has already left a scar. - Luffy
-When you give up, that’s when the game is over. - Misaki Ayuzawa, Kaichou wa Maid-sama!
+When you give up, that’s when the game is over. - Misaki
 Whatever you lose, you’ll find it again. But what you throw away you’ll never get back. - Kenshin Himura
-A lesson in humility is worth more than a thousand victories. - Saitama, One Punch Man
+A lesson in humility is worth more than a thousand victories. - Saitama
 If you don’t take risks, you can’t create a future. - Luffy
-Power is not will. It is the phenomenon of physically making things happen. - Madara Uchiha
-A person grows up when they’re able to overcome hardships. Protection is important, but there are some things a person must learn on their own. - Jiraiya, Naruto
+Power is not will. It is the phenomenon of physically making things happen. - Madara
+A person grows up when they’re able to overcome hardships. Protection is important, but there are some things a person must learn on their own. - Jiraiya
 Fear is freedom! Subjugation is liberation! Contradiction is truth! These are the truths of this world! - Satsuki Kiryuuin
-The world isn’t beautiful. But that’s why it is. - Kino, Kino’s Journey
+The world isn’t beautiful. But that’s why it is. - Kino
 Hard work is worthless for those that don’t believe in themselves. - Naruto
 It’s not the face that makes someone a monster; it’s the choices they make with their lives. - Naruto
 A person becomes strong when they have someone they want to protect. - Haku, Naruto
 A sword is a tool for killing. The art of swordsmanship is learning how to kill. That is the truth. - Rurouni Kenshin
 The world is cruel. But it’s also very beautiful. - Mikasa
-People’s lives don’t end when they die, it ends when they lose faith. - Itachi Uchiha, Naruto
+People’s lives don’t end when they die, it ends when they lose faith. - Itachi
 You should enjoy the little detours. To the fullest. Because that's where you'll find the things more important than what you want. - Ging Freecss, Hunter x Hunter
-A lesson learned without pain is meaningless. - Edward Elric, Fullmetal Alchemist
-Power is not will. It is the phenomenon of physically making things happen. - Madara Uchiha, Naruto
+A lesson learned without pain is meaningless. - Edward Elric
+Power is not will. It is the phenomenon of physically making things happen. - Madara
 Fear is not evil. It tells you what your weakness is. And once you know your weakness, you can become stronger. - Gildarts Clive
 If you don’t take risks, you can’t create a future. - Luffy
 A person’s strength is not based on their ability to punch someone into orbit; it’s their capacity to protect others. - Saitama, One Punch Man
@@ -30,16 +30,16 @@ The world is cruel. But it’s also very beautiful. - Mikasa
 If you don’t take risks, you can’t create a future. - Luffy
 The world isn’t perfect. But it’s there for us, trying the best it can; that’s what makes it so damn beautiful. - Roy Mustang
 Fear is freedom! Subjugation is liberation! Contradiction is truth! - Satsuki Kiryuuin, Kill la Kill
-People’s lives don’t end when they die, it ends when they lose faith. - Itachi Uchiha, Naruto
-A lesson in humility is worth more than a thousand victories. - Saitama, One Punch Man
+People’s lives don’t end when they die, it ends when they lose faith. - Itachi
+A lesson in humility is worth more than a thousand victories. - Saitama
 The world isn’t beautiful. But that’s why it is. - Kino
 It’s not the face that makes someone a monster; it’s the choices they make with their lives. - Naruto
 Fear is not evil. It tells you what your weakness is. And once you know your weakness, you can become stronger. - Gildarts Clive
 Hard work is worthless for those that don’t believe in themselves. - Naruto
 The world is cruel. But it’s also very beautiful. - Mikasa
 A sword is a tool for killing. The art of swordsmanship is learning how to kill. That is the truth. - Rurouni Kenshin
-When you give up, that’s when the game is over. - Misaki Ayuzawa
-Power is not will. It is the phenomenon of physically making things happen. - Madara Uchiha
+When you give up, that’s when the game is over. - Misaki
+Power is not will. It is the phenomenon of physically making things happen. - Madara
 If you don’t take risks, you can’t create a future. - Luffy
 The world is cruel. But it’s also very beautiful. - Mikasa
 Hard work is worthless for those that don’t believe in themselves. - Naruto
@@ -50,19 +50,59 @@ Fear is not evil. It tells you what your weakness is. And once you know your wea
 The world is cruel. But it’s also very beautiful. - Mikasa
 A sword is a tool for killing. The art of swordsmanship is learning how to kill. That is the truth. - Rurouni Kenshin
 If you don’t take risks, you can’t create a future. - Luffy
-People’s lives don’t end when they die, it ends when they lose faith. - Itachi Uchiha Default
-A lesson in humility is worth more than a thousand victories. - Saitama, One Punch Man Default
+People’s lives don’t end when they die, it ends when they lose faith. - Itachi
+A lesson in humility is worth more than a thousand victories. - Saitama
 Hard work is worthless for those that don’t believe in themselves. - Naruto
 If you don’t take risks, you can’t create a future. - Luffy
-People’s lives don’t end when they die, it ends when they lose faith. - Itachi Uchiha  Default
+People’s lives don’t end when they die, it ends when they lose faith. - Itachi
 The world is cruel. But it’s also very beautiful. - Mikasa
 Fear is not evil. It tells you what your weakness is. And once you know your weakness, you can become stronger. - Gildarts Clive
 Hard work is worthless for those that don’t believe in themselves. - Naruto
 Power comes in response to a need, not a desire. You have to create that need. - Goku
-When you give up, that’s when the game is over. - Misaki Ayuzawa  Default
-People’s lives don’t end when they die, it ends when they lose faith. - Itachi Uchiha  Default
+When you give up, that’s when the game is over. - Misaki
+People’s lives don’t end when they die, it ends when they lose faith. - Itachi
 The world isn’t perfect. But it’s there for us, trying the best it can; that’s what makes it so damn beautiful. - Roy Mustang
-Power is not will. It is the phenomenon of physically making things happen. - Madara Uchiha
+Power is not will. It is the phenomenon of physically making things happen. - Madara
 Fear is not evil. It tells you what your weakness is. And once you know your weakness, you can become stronger. - Gildarts Clive
 A lesson in humility is worth more than a thousand victories. - Saitama
 Whatever you lose, you’ll find it again. But what you throw away you’ll never get back. - Kenshin Himura
+Fear is not evil. It tells you what your weakness is. - Gildarts Clive
+Do or do not. There is no try. - Yoda
+Winter is coming. - Eddard Stark
+With great power comes great responsibility. - Uncle Ben
+I am the one who knocks. - Walter White
+Why so serious. - Joker
+It’s not about how hard you hit. It’s about how hard you can get hit and keep moving forward. - Rocky Balboa
+The night is darkest just before the dawn. - Harvey Dent
+A Lannister always pays his debts. - Tyrion Lannister
+The truth is out there. - Fox Mulder
+You either die a hero or live long enough to see yourself become the villain. - Harvey Dent
+I am inevitable. - Thanos
+I am Groot. - Groot
+Not all those who wander are lost. - Aragorn
+Elementary, my dear Watson. - Sherlock Holmes
+I solemnly swear that I am up to no good. - Harry Potter
+I drink and I know things. - Tyrion Lannister
+Power is power. - Cersei Lannister
+Live long and prosper. - Spock
+To infinity and beyond. - Buzz Lightyear
+Hakuna Matata. - Timon și Pumbaa
+Just keep swimming. - Dory
+Roads? Where we're going, we don't need roads. - Doc Brown
+Why do we fall? So we can learn to pick ourselves up. - Alfred Pennyworth
+Freedom is the right of all sentient beings. - Optimus Prime
+I see dead people. - Cole Sear
+You can’t handle the truth. - Colonel Jessup
+Life is like a box of chocolates, you never know what you’re gonna get. - Forrest Gump
+Hasta la vista, baby. - Terminator
+Keep your friends close, but your enemies closer. - Michael Corleone
+Say hello to my little friend. - Tony Montana
+I’ll be back. - Terminator
+Bond. James Bond. - James Bond
+Frankly, my dear, I don't give a damn. - Rhett Butler
+All we have to decide is what to do with the time that is given to us. - Gandalf
+You’re gonna need a bigger boat. - Martin Brody
+I am vengeance. I am the night. I am Batman. - Batman
+In the game of thrones, you win or you die. - Cersei Lannister
+This is Sparta. - King Leonidas
+

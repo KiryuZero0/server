@@ -6,9 +6,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
 
-import org.json.simple.*;
-import org.json.simple.parser.JSONParser;
-
 public class QuoteServer {
     private static final int PORT = 12345;
     private static final String QUOTES_FILE = "src/main/resources/quotes.txt";

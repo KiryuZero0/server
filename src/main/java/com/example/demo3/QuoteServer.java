@@ -1,3 +1,4 @@
+// QuoteServer.java - Server robust pentru citate
 package com.example.demo3;
 
 import java.io.*;
@@ -11,10 +12,10 @@ public class QuoteServer {
     private static final String QUOTES_FILE = "src/main/resources/quotes.txt";
     private static final String USERS_FILE = "src/main/resources/users.json";
 
-    private static final List<ClientHandler> clients = new ArrayList<>();
-    private static final Map<String, Integer> videoVotes = new HashMap<>();
-    private static final List<String> proposedVideos = new ArrayList<>();
-    private static final List<String> quotes = new ArrayList<>();
+    private static final List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
+    private static final Map<String, Integer> videoVotes = new ConcurrentHashMap<>();
+    private static final List<String> proposedVideos = Collections.synchronizedList(new ArrayList<>());
+    private static final List<String> quotes = Collections.synchronizedList(new ArrayList<>());
 
     private static final Logger logger = Logger.getLogger(QuoteServer.class.getName());
 
@@ -34,22 +35,21 @@ public class QuoteServer {
                     logger.info("Client connected: " + clientSocket.getInetAddress());
 
                     ClientHandler handler = new ClientHandler(clientSocket);
-                    synchronized (clients) {
-                        clients.add(handler);
-                    }
+                    clients.add(handler);
                     threadPool.submit(handler);
                 } catch (IOException e) {
-                    logger.warning("Error accepting client: " + e.getMessage());
+                    logger.log(Level.WARNING, "Error accepting client connection: ", e);
                 }
             }
         } catch (IOException e) {
-            logger.severe("Error starting server: " + e.getMessage());
+            logger.log(Level.SEVERE, "Error starting server: ", e);
         } finally {
             threadPool.shutdown();
             logger.info("Server shut down.");
         }
     }
 
+    // Încarcă citate din fișier
     private static void loadQuotes() {
         try (BufferedReader reader = new BufferedReader(new FileReader(QUOTES_FILE))) {
             String line;
@@ -58,10 +58,11 @@ public class QuoteServer {
             }
             logger.info("Loaded " + quotes.size() + " quotes.");
         } catch (IOException e) {
-            logger.warning("Failed to load quotes: " + e.getMessage());
+            logger.log(Level.WARNING, "Failed to load quotes: ", e);
         }
     }
 
+    // Configurarea loggerului
     private static void configureLogger() {
         try {
             LogManager.getLogManager().reset();
@@ -82,6 +83,7 @@ public class QuoteServer {
         }
     }
 
+    // Gestionarea fiecărui client
     static class ClientHandler implements Runnable {
         private final Socket clientSocket;
         private PrintWriter out;
@@ -99,97 +101,71 @@ public class QuoteServer {
 
                 String clientMessage;
                 while ((clientMessage = in.readLine()) != null) {
-                    if (clientMessage.equals("GET_QUOTE")) {
-                        sendRandomQuote();
-                    } else if (clientMessage.startsWith("CHAT:")) {
-                        handleChat(clientMessage.substring(5));
-                    } else if (clientMessage.startsWith("PROPOSE:")) {
-                        handleProposedVideo(clientMessage.substring(8));
-                    } else if (clientMessage.startsWith("VOTE:")) {
-                        handleVote(clientMessage.substring(5));
-                    }
+                    handleMessage(clientMessage);
                 }
             } catch (IOException e) {
-                logger.warning("Error handling client: " + e.getMessage());
+                logger.log(Level.WARNING, "Error handling client: ", e);
             } finally {
-                try {
-                    clientSocket.close();
-                    synchronized (clients) {
-                        clients.remove(this);
-                    }
-                } catch (IOException e) {
-                    logger.severe("Error closing client socket: " + e.getMessage());
-                }
+                cleanup();
             }
         }
 
+        // Gestionează mesajele primite de la client
+        private void handleMessage(String clientMessage) {
+            if (clientMessage.equals("GET_QUOTE")) {
+                sendRandomQuote();
+            } else if (clientMessage.startsWith("CHAT:")) {
+                broadcastMessage(clientMessage.substring(5));
+            } else if (clientMessage.startsWith("PROPOSE:")) {
+                handleProposedVideo(clientMessage.substring(8));
+            } else if (clientMessage.startsWith("VOTE:")) {
+                handleVote(clientMessage.substring(5));
+            }
+        }
+
+        // Trimite un citat aleatoriu clientului
         private void sendRandomQuote() {
             if (quotes.isEmpty()) {
                 out.println("SERVER: No quotes available.");
                 return;
             }
-
             Random random = new Random();
             String randomQuote = quotes.get(random.nextInt(quotes.size()));
-
-            // Parse quote and author
-            String[] parts = randomQuote.split(" - ", 2);
-            if (parts.length == 2) {
-                String quoteText = parts[0].trim();
-                String author = parts[1].trim();
-
-                out.println("QUOTE:" + quoteText + " - " + author);
-                out.println("IMAGE:images/" + author.replace(" ", "_").toLowerCase() + ".jpg");
-            } else {
-                out.println("SERVER: Invalid quote format.");
-            }
+            out.println("QUOTE:" + randomQuote);
         }
 
-        private void handleChat(String message) {
-            broadcastMessage("CHAT:" + message);
-        }
-
-        private void handleProposedVideo(String videoUrl) {
-            synchronized (proposedVideos) {
-                if (!proposedVideos.contains(videoUrl)) {
-                    proposedVideos.add(videoUrl);
-                    broadcastProposals();
-                } else {
-                    out.println("SERVER: Video already proposed.");
-                }
-            }
-        }
-
-        private void handleVote(String videoUrl) {
-            synchronized (videoVotes) {
-                videoVotes.put(videoUrl, videoVotes.getOrDefault(videoUrl, 0) + 1);
-
-                if (videoVotes.get(videoUrl) > clients.size() / 2) {
-                    broadcastMessage("VIDEO_CHANGE:" + videoUrl);
-                    proposedVideos.clear();
-                    videoVotes.clear();
-                } else {
-                    broadcastProposals();
-                }
-            }
-        }
-
-        private void broadcastProposals() {
-            StringBuilder proposalsMessage = new StringBuilder("PROPOSALS:");
-            synchronized (proposedVideos) {
-                for (String video : proposedVideos) {
-                    proposalsMessage.append("\n").append(video).append(" (")
-                            .append(videoVotes.getOrDefault(video, 0)).append(" votes)");
-                }
-            }
-            broadcastMessage(proposalsMessage.toString());
-        }
-
+        // Trimite un mesaj către toți clienții
         private void broadcastMessage(String message) {
             synchronized (clients) {
                 for (ClientHandler client : clients) {
-                    client.out.println(message);
+                    client.out.println("CHAT:" + message);
                 }
+            }
+        }
+
+        // Gestionează propunerea unui videoclip
+        private void handleProposedVideo(String video) {
+            synchronized (proposedVideos) {
+                proposedVideos.add(video);
+            }
+            out.println("SERVER: Video proposed successfully.");
+        }
+
+        // Gestionează voturile pentru videoclipuri
+        private void handleVote(String video) {
+            videoVotes.merge(video, 1, Integer::sum);
+            out.println("SERVER: Vote recorded for video: " + video);
+        }
+
+        // Cleanup la închiderea conexiunii
+        private void cleanup() {
+            try {
+                clientSocket.close();
+                synchronized (clients) {
+                    clients.remove(this);
+                }
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Error closing client socket: ", e);
             }
         }
     }

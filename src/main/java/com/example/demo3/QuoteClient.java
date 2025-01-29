@@ -35,6 +35,7 @@ public class QuoteClient extends Application {
     private ListView<String> chatListView = new ListView<>();
     private TextField chatInput = new TextField();
     private String username = "Guest";
+    private Socket socket;
 
 
     // Live Tab
@@ -330,8 +331,7 @@ public class QuoteClient extends Application {
             String message = chatInput.getText().trim();
             if (!message.isEmpty()) {
                 String fullMessage = username + ": " + message;
-                chatListView.getItems().add(fullMessage);
-                sendRequest("CHAT:" + fullMessage);
+                sendRequest(fullMessage); // Trimite mesajul la server
                 chatInput.clear();
             }
         });
@@ -635,10 +635,28 @@ public class QuoteClient extends Application {
         try {
             Socket socket = new Socket("127.0.0.1", 12345);
             out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            // Ascultă mesajele primite de la server într-un fir de execuție separat
+            new Thread(() -> {
+                try {
+                    String message;
+                    while ((message = in.readLine()) != null) {
+                        if (message.startsWith("CHAT:")) {
+                            String chatMessage = message.substring(5);
+                            Platform.runLater(() -> chatListView.getItems().add(chatMessage)); // Afișează mesajul în UI
+                        }
+                    }
+                } catch (IOException e) {
+                    showError("Disconnected from server.");
+                }
+            }).start();
         } catch (IOException e) {
             showError("Failed to connect to the server.");
         }
     }
+
+
 
     private void showError(String message) {
         Platform.runLater(() -> {
@@ -651,12 +669,14 @@ public class QuoteClient extends Application {
     }
 
     private void sendRequest(String message) {
-        if (out != null) { // Verifică dacă conexiunea este activă
-            out.println(message);
+        if (out != null) {
+            out.println("CHAT:" + message); // Trimite mesajul către server
         } else {
             showError("Server connection is not established.");
         }
     }
+
+
 
 
     private void updateVideoList(String category) {

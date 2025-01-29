@@ -622,3 +622,129 @@ java.net.SocketException: Connection reset
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1575)
 
+ian. 29, 2025 3:57:16 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 3:57:16 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 3:57:16 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 3:57:28 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 4:03:11 A.M. com.example.demo3.QuoteServer$ClientHandler run
+WARNING: Error handling client: 
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:318)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:346)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:796)
+	at java.base/java.net.Socket$SocketInputStream.implRead(Socket.java:1116)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:1103)
+	at java.base/sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:350)
+	at java.base/sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:393)
+	at java.base/sun.nio.cs.StreamDecoder.lockedRead(StreamDecoder.java:217)
+	at java.base/sun.nio.cs.StreamDecoder.read(StreamDecoder.java:171)
+	at java.base/java.io.InputStreamReader.read(InputStreamReader.java:190)
+	at java.base/java.io.BufferedReader.fill(BufferedReader.java:160)
+	at java.base/java.io.BufferedReader.implReadLine(BufferedReader.java:370)
+	at java.base/java.io.BufferedReader.readLine(BufferedReader.java:347)
+	at java.base/java.io.BufferedReader.readLine(BufferedReader.java:436)
+	at com.example.demo3/com.example.demo3.QuoteServer$ClientHandler.run(QuoteServer.java:103)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+
+ian. 29, 2025 9:55:48 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 9:55:49 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 9:55:49 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 9:55:59 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 9:56:34 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 9:58:52 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 9:58:52 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 9:58:52 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 9:59:04 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 9:59:19 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:03:38 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 10:03:38 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 10:03:38 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 10:03:50 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:04:07 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:08:30 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 10:08:30 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 10:08:30 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 10:08:39 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:08:43 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:13:58 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 10:13:58 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 10:13:58 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 10:14:09 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:16:21 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 10:16:21 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 10:16:21 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 10:16:27 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:16:37 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:18:04 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 10:18:04 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 10:18:04 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 10:18:12 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:18:39 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:29:57 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 10:29:57 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 10:29:57 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 10:30:16 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:30:16 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:43:38 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 10:43:38 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 10:43:38 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 10:43:43 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
+ian. 29, 2025 10:43:53 A.M. com.example.demo3.QuoteServer main
+INFO: Starting QuoteServer...
+ian. 29, 2025 10:43:54 A.M. com.example.demo3.QuoteServer loadQuotes
+INFO: Loaded 108 quotes.
+ian. 29, 2025 10:43:54 A.M. com.example.demo3.QuoteServer main
+INFO: Server started on port 12345
+ian. 29, 2025 10:44:00 A.M. com.example.demo3.QuoteServer main
+INFO: Client connected: /127.0.0.1
